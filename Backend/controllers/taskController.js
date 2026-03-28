@@ -6,13 +6,13 @@ export const createTask = async (req, res) => {
   try {
     const { title, due_date } = req.body;
 
-    // Rule: due_date must be today or later
+    
     const today = new Date().toISOString().split('T')[0]; 
     if (due_date < today) {
       return res.status(400).json({ message: "due_date must be today or later" });
     }
 
-    // Rule: title cannot duplicate a task with the same due_date
+    
     const duplicate = await Task.findOne({ where: { title, due_date } });
     if (duplicate) {
       return res.status(400).json({ message: "Task with this title and due date already exists" });
@@ -33,7 +33,7 @@ export const getAllTasks = async (req, res) => {
 
     const tasks = await Task.findAll({
       where: whereClause,
-      // Rule: Sort by priority (high -> low), then due_date ascending
+      
       order: [
         [sequelize.literal("FIELD(priority, 'high', 'medium', 'low')"), "ASC"],
         ["due_date", "ASC"]
@@ -49,7 +49,7 @@ export const getAllTasks = async (req, res) => {
   }
 };
 
-// 3. Update Task Status (Progressive)
+// 3. Update Task Status 
 export const updateTaskStatus = async (req, res) => {
   try {
     const { status: newStatus } = req.body;
