@@ -6,6 +6,10 @@ import taskRoutes from "./routes/taskRoutes.js";
 
 const app = express();
 
+app.get("/", (req, res) => {
+  res.send(" Task Manager API is running!");
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
