@@ -40,7 +40,7 @@ const formatStatus = (status) => {
           class="btn-start"
           @click="emit('update-status', task.id, 'in_progress')"
         >
-          ▶️ Start
+           Start
         </button>
 
         <button 
@@ -48,7 +48,7 @@ const formatStatus = (status) => {
           class="btn-done"
           @click="emit('update-status', task.id, 'done')"
         >
-          ✅ Finish
+           Finish
         </button>
 
         <button 
@@ -56,7 +56,7 @@ const formatStatus = (status) => {
           class="btn-delete" 
           @click="emit('delete-task', task.id)"
         >
-          🗑️ Delete
+           Delete
         </button>
       </div>
     </div>
@@ -69,7 +69,7 @@ const formatStatus = (status) => {
   border-radius: 12px;
   margin-bottom: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border-left: 8px solid #cbd5e1; /* Fallback color */
+  border-left: 2px solid #cbd5e1; /* Fallback color */
   padding: 20px;
   transition: transform 0.2s, box-shadow 0.2s;
 }

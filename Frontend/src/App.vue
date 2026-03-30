@@ -113,6 +113,18 @@ onMounted(fetchTasks);
         @delete-task="handleDelete"
       />
     </section>
+
+    <footer class="main-footer">
+      <div class="footer-content">
+        <div class="footer-stats">
+          <span>Total: <strong>{{ tasks.length }}</strong></span>
+          <span>Done: <strong>{{ tasks.filter(t => t.status === 'done').length }}</strong></span>
+        </div>
+        <div class="footer-info">
+          <p>&copy; 2026 Task Manager • Built by Pheobe Nyawanda</p>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -127,7 +139,7 @@ onMounted(fetchTasks);
   display: flex;
   flex-direction: column;
   align-items: center;       /* Centers the content block */
-  padding-top: 50px;
+  padding-top: 10px;
 }
 
 .main-header {
@@ -136,7 +148,7 @@ onMounted(fetchTasks);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 h1 {
@@ -179,5 +191,26 @@ h1 {
 .status-menu button.active {
   color: #2563eb;            /* Blue for the active tab */
   border-bottom: 3px solid #2563eb;
+}
+.footer-content {
+  width: 90%;
+  max-width: 1000px;
+  margin: 0 auto;
+  
+  /* THIS PART CREATES THE "OPPOSITE" EFFECT */
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  
+  padding: 10px 0;
+}
+
+/* Optional: Add a little breathing room to the footer itself */
+.main-footer {
+  width: 100%;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  margin-top: auto;
+  padding: 20px 0;
 }
 </style>
