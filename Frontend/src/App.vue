@@ -1,20 +1,21 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import TaskList from './components/TaskList.vue';
+import TaskList from './components/Tasklist.vue';
 import AddTaskModal from './components/AddTaskModal.vue';
 
 // 1. STATE
 const tasks = ref([]);
 const showModal = ref(false);
-const activeTab = ref('all'); // Added: This was missing!
+const activeTab = ref('all');
 const API_URL = 'https://taskmanager-j4zq.onrender.com/api/tasks';
 
 // 2. FETCH TASKS
 const fetchTasks = async () => {
   try {
     const res = await axios.get(API_URL);
-    tasks.value = res.data;
+    // Ensure we handle cases where res.data might not be an array
+    tasks.value = Array.isArray(res.data) ? res.data : [];
   } catch (err) {
     console.error("Error fetching tasks:", err);
   }
@@ -23,30 +24,46 @@ const fetchTasks = async () => {
 // 3. ACTIONS
 const handleSaveTask = async (taskData) => {
   try {
-    await axios.post(API_URL, taskData);
+    // We construct the payload to match your Sequelize Model exactly
+    const payload = {
+      title: taskData.title,
+      due_date: taskData.due_date, // Backend expects YYYY-MM-DD
+      priority: taskData.priority || 'medium',
+      status: taskData.status || 'pending'
+    };
+
+    await axios.post(API_URL, payload);
+    
     showModal.value = false;
-    fetchTasks(); // Refresh list after saving
+    await fetchTasks(); // Refresh list
   } catch (err) {
-    console.error("Error saving task:", err);
+    // This detailed log helps you find the exact field causing the 400 error
+    if (err.response) {
+      console.error("Server Validation Error:", err.response.data);
+      alert(`Save failed: ${JSON.stringify(err.response.data.message || err.response.data)}`);
+    } else {
+      console.error("Error saving task:", err.message);
+    }
   }
 };
 
 const handleUpdate = async (id, status) => {
   try {
+    // Note: Ensure your backend route for PATCH exists as /api/tasks/:id/status
     await axios.patch(`${API_URL}/${id}/status`, { status });
-    fetchTasks();
+    await fetchTasks();
   } catch (err) {
-    console.error("Update failed:", err);
+    console.error("Update failed:", err.response?.data || err.message);
   }
 };
 
 const handleDelete = async (id) => {
-  if (confirm("Are you sure?")) {
+  if (confirm("Are you sure you want to delete this task?")) {
     try {
       await axios.delete(`${API_URL}/${id}`);
-      fetchTasks();
+      await fetchTasks();
     } catch (err) {
-      console.error("Delete failed:", err);
+      console.error("Delete failed:", err.response?.data || err.message);
     }
   }
 };
@@ -86,6 +103,10 @@ onMounted(fetchTasks);
     </nav>
 
     <section class="list-wrapper">
+      <div v-if="filteredTasks.length === 0" style="text-align: center; color: #94a3b8; margin-top: 20px;">
+        No tasks found in this category.
+      </div>
+      
       <TaskList 
         :tasks="filteredTasks" 
         @update-status="handleUpdate"
@@ -94,10 +115,6 @@ onMounted(fetchTasks);
     </section>
   </div>
 </template>
-
-<style>
-/* Your existing CSS is fine - it looks good! */
-</style>
 
 <style>
 /* Dashboard Styling */

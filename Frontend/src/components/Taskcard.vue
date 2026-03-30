@@ -1,24 +1,62 @@
+<script setup>
+// 1. Define Props: This allows the card to receive the task object
+const props = defineProps({
+  task: {
+    type: Object,
+    required: true
+  }
+});
+
+// 2. Define Emits: This allows the card to send actions back to App.vue
+const emit = defineEmits(['update-status', 'delete-task']);
+
+// Helper to format the status for display if needed
+const formatStatus = (status) => {
+  return status.replace('_', ' ').toUpperCase();
+};
+</script>
+
 <template>
-  <div class="task-card" :class="task.priority">
+  <div class="task-card" :class="task.priority?.toLowerCase()">
     <div class="card-content">
       <div class="task-details">
         <span class="priority-label">
-          <span class="dot"></span> {{ task.priority.toUpperCase() }}
+          <span class="dot"></span> {{ task.priority?.toUpperCase() || 'MEDIUM' }}
         </span>
         <h3>{{ task.title }}</h3>
-        <p class="due-date">Due: {{ task.due_date || 'No date' }}</p>
+        <p class="due-date">
+          <strong>Due:</strong> {{ task.due_date || 'No date set' }}
+        </p>
+        <span class="status-badge" :class="task.status">
+          {{ task.status?.replace('_', ' ') }}
+        </span>
       </div>
 
       <div class="card-actions">
         <p class="action-label">Action</p>
-        <button v-if="task.status === 'pending'" @click="$emit('update-status', task.id, 'in_progress')">
-           ▶️ Start Working
+        
+        <button 
+          v-if="task.status === 'pending'" 
+          class="btn-start"
+          @click="emit('update-status', task.id, 'in_progress')"
+        >
+          ▶️ Start
         </button>
-        <button v-if="task.status === 'in_progress'" @click="$emit('update-status', task.id, 'done')">
-           👉 Mark as Done
+
+        <button 
+          v-if="task.status === 'in_progress'" 
+          class="btn-done"
+          @click="emit('update-status', task.id, 'done')"
+        >
+          ✅ Finish
         </button>
-        <button v-if="task.status === 'done'" class="delete-btn" @click="$emit('delete-task', task.id)">
-           🗑️ Delete
+
+        <button 
+          v-if="task.status === 'done'" 
+          class="btn-delete" 
+          @click="emit('delete-task', task.id)"
+        >
+          🗑️ Delete
         </button>
       </div>
     </div>
@@ -30,34 +68,100 @@
   background: white;
   border-radius: 12px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border-left: 8px solid #cbd5e1; /* Default */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border-left: 8px solid #cbd5e1; /* Fallback color */
   padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Priority Borders */
-.task-card.high { border-left-color: #ef4444; }
-.task-card.medium { border-left-color: #f59e0b; }
-.task-card.low { border-left-color: #10b981; }
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Priority Colors matching your Sequelize ENUM */
+.task-card.high { border-left-color: #ef4444; }    /* Red */
+.task-card.medium { border-left-color: #f59e0b; }  /* Amber */
+.task-card.low { border-left-color: #10b981; }     /* Emerald */
 
 .card-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 }
 
-h3 { margin: 8px 0; font-size: 1.2rem; color: #1e293b; }
-.priority-label { font-size: 0.75rem; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 5px; }
-.dot { height: 8px; width: 8px; border-radius: 50%; background: currentColor; }
+.task-details h3 {
+  margin: 8px 0;
+  font-size: 1.25rem;
+  color: #1e293b;
+  font-weight: 700;
+}
 
-.action-label { font-size: 0.7rem; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase; }
+.priority-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.05em;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.due-date {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Actions Section */
+.card-actions {
+  text-align: right;
+  min-width: 120px;
+}
+
+.action-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
 
 .card-actions button {
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  padding: 10px 20px;
+  width: 100%;
+  padding: 10px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all 0.2s;
 }
+
+.btn-start { background: #eff6ff; color: #2563eb; border-color: #dbeafe !important; }
+.btn-start:hover { background: #dbeafe; }
+
+.btn-done { background: #f0fdf4; color: #16a34a; border-color: #dcfce7 !important; }
+.btn-done:hover { background: #dcfce7; }
+
+.btn-delete { background: #fef2f2; color: #dc2626; border-color: #fee2e2 !important; }
+.btn-delete:hover { background: #fee2e2; }
 </style>
