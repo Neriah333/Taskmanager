@@ -1,4 +1,4 @@
-import Task from "../models/tasks.js"; // Note the .js extension
+import Task from "../models/tasks.js"; 
 import sequelize from "../config/db.js";
 
 // 1. Create Task
@@ -22,6 +22,22 @@ export const createTask = async (req, res) => {
     res.status(201).json(task);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+export const getTaskById = async (req, res) => {
+  try {
+    const { id } = req.params; // Grabs the ID from the URL (e.g., /api/tasks/5)
+    
+    const task = await Task.findByPk(id);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 

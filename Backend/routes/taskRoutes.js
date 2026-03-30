@@ -1,6 +1,7 @@
 import express from "express";
 import { 
   createTask, 
+  getTaskById,
   getAllTasks, 
   updateTaskStatus, 
   deleteTask, 
@@ -10,6 +11,7 @@ import {
 const router = express.Router();
 
 router.post("/", createTask);
+router.get('/:id', getTaskById);
 router.get("/", getAllTasks);
 router.get("/report", getDailyReport); // Put this BEFORE /:id
 router.patch("/:id/status", updateTaskStatus);
