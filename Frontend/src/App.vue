@@ -28,18 +28,18 @@ const fetchTasks = async () => {
 
 // 4. ADD THIS: Function to open the edit modal
 const openEditModal = (task) => {
-  selectedTask.value = { ...task }; // Create a copy
+  selectedTask.value = { ...task }; 
   showEditModal.value = true;
 };
 
 // 5. UPDATE handleSaveTask to handle EDITS too
 const handleSaveTask = async (taskData) => {
   try {
-    // Check if we are editing (id exists) or creating (no id)
+    
     const isEdit = !!taskData.id;
     const url = isEdit ? `${API_URL}/${taskData.id}` : API_URL;
     
-    // Construct the exact payload your backend expects
+    
     const payload = {
       title: taskData.title,
       due_date: taskData.due_date,
@@ -48,10 +48,10 @@ const handleSaveTask = async (taskData) => {
     };
 
     if (isEdit) {
-      // ✅ Use PUT for updates
+      
       await axios.put(url, payload);
     } else {
-      // ➕ Use POST for new tasks
+     
       await axios.post(url, payload);
     }
 
@@ -61,9 +61,9 @@ const handleSaveTask = async (taskData) => {
     
     // Refresh the list from the database
     await fetchTasks(); 
-  } // Inside App.vue -> handleSaveTask
+  } 
  catch (err) {
-  // Extract the specific message from the backend response
+  
   const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message;
   
   console.error("Save failed details:", err.response?.data); 
@@ -167,22 +167,21 @@ onMounted(fetchTasks);
 </template>
 
 <style>
-/* Dashboard Styling */
-/* Add this to the <style> section of App.vue */
+
 .dashboard-container {
   width: 100%;
   min-height: 100vh;
-  background-color: #f8fafc; /* Subtle light gray background */
-  color: #1e293b;            /* Dark slate text for better visibility */
+  background-color: #f8fafc; 
+  color: #1e293b;            
   display: flex;
   flex-direction: column;
-  align-items: center;       /* Centers the content block */
+  align-items: center;       
   padding-top: 10px;
 }
 
 .main-header {
   width: 90%;
-  max-width: 1000px;         /* Prevents it from getting TOO wide */
+  max-width: 1000px;         
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -211,14 +210,14 @@ onMounted(fetchTasks);
 }
 
 h1 {
-  color: #0f172a;            /* Make the title deep black/blue */
+  color: #0f172a;           
   font-size: 2rem;
   font-weight: 800;
 }
 
 
 .add-task-btn {
-  background-color: #10b981; /* Emerald Green */
+  background-color: #10b981; 
   color: white;
   border: none;
   padding: 12px 24px;
@@ -227,12 +226,12 @@ h1 {
   cursor: pointer;
 }
 
-/* The Status Menu */
+
 .status-menu {
   width: 90%;
   max-width: 1000px;
   display: flex;
-  gap: 40px;                 /* Adds space between All, Pending, etc. */
+  gap: 40px;                 
   border-bottom: 2px solid #e2e8f0;
   margin-bottom: 30px;
 }
@@ -240,7 +239,7 @@ h1 {
 .status-menu button {
   padding: 15px 10px;
   font-size: 1.1rem;
-  color: #64748b;            /* Muted gray for inactive tabs */
+  color: #64748b;            
   background: none;
   border: none;
   cursor: pointer;
@@ -248,7 +247,7 @@ h1 {
 }
 
 .status-menu button.active {
-  color: #2563eb;            /* Blue for the active tab */
+  color: #2563eb;            
   border-bottom: 3px solid #2563eb;
 }
 .footer-content {
@@ -256,7 +255,7 @@ h1 {
   max-width: 1000px;
   margin: 0 auto;
   
-  /* THIS PART CREATES THE "OPPOSITE" EFFECT */
+ 
   display: flex;
   justify-content: space-between; 
   align-items: center; 
@@ -264,7 +263,7 @@ h1 {
   padding: 10px 0;
 }
 
-/* Optional: Add a little breathing room to the footer itself */
+
 .main-footer {
   width: 100%;
   background-color: #ffffff;

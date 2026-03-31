@@ -12,7 +12,7 @@ const props = defineProps({
 const emit = defineEmits(['close', 'save']);
 
 // 2. Initialize with a copy of the task props
-// This allows the user to type without changing the main list until they hit "Save"
+
 const editedTask = ref({ ...props.task });
 
 watch(() => props.task, (newVal) => {
@@ -80,7 +80,7 @@ const submitForm = () => {
 </template>
 
 <style scoped>
-/* Styles remain consistent with your AddTask modal */
+
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -109,13 +109,11 @@ input:focus, select:focus {
   border-color: #3b82f6;
 }
 .modal-actions { display: flex; gap: 12px; margin-top: 10px; }
-/* ✅ Standardized Green styles */
 .btn-save { 
-  background: #10b981; /* Emerald Green - matching AddTask/header */
+  background: #10b981; 
   color: white; 
-  /* ... other styles remain the same ... */
   border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer;
 }
-.btn-save:hover { background: #059669; } /* Darker green hover */
+.btn-save:hover { background: #059669; } 
 .btn-cancel { background: #f1f5f9; color: #64748b; flex: 1; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
 </style>

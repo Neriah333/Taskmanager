@@ -86,10 +86,10 @@ const formatStatus = (status) => {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* Priority Colors matching your Sequelize ENUM */
-.task-card.high { border-left-color: #ef4444; }    /* Red */
-.task-card.medium { border-left-color: #f59e0b; }  /* Amber */
-.task-card.low { border-left-color: #10b981; }     /* Emerald */
+
+.task-card.high { border-left-color: #ef4444; }    
+.task-card.medium { border-left-color: #f59e0b; }  
+.task-card.low { border-left-color: #10b981; }    
 
 .card-content {
   display: flex;
@@ -139,7 +139,7 @@ const formatStatus = (status) => {
   color: #475569;
 }
 
-/* Actions Section */
+
 .card-actions {
   text-align: right;
   min-width: 120px;
@@ -153,7 +153,7 @@ const formatStatus = (status) => {
   font-weight: 700;
 }
 
-/* Add this below your other button styles */
+
 .btn-edit { 
   background: #f8fafc; 
   color: #475569; 
@@ -166,7 +166,7 @@ const formatStatus = (status) => {
   color: #1e293b;
 }
 
-/* Ensure buttons stack nicely if multiple are visible */
+
 .card-actions button {
   width: 100%;
   padding: 10px;

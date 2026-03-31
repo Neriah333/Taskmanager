@@ -3,11 +3,11 @@ import { ref } from 'vue';
 
 const emit = defineEmits(['close', 'save']);
 
-// Initialize with defaults that match your Sequelize model
+// Initialize with defaults that match Sequelize model
 const newTask = ref({
   title: '',
   due_date: '',
-  priority: 'medium' // Changed to 'medium' to match your DB default
+  priority: 'medium' 
 });
 
 const submitForm = () => {
@@ -21,7 +21,7 @@ const submitForm = () => {
   }
 
   // 2. Emit the data to App.vue
-  // We send a copy to avoid reactivity issues during the reset
+ 
   emit('save', { ...newTask.value });
 
   // 3. Reset form for the next time it opens
@@ -83,7 +83,7 @@ const submitForm = () => {
   background: rgba(0, 0, 0, 0.6); /* Slightly darker for focus */
   display: flex; justify-content: center; align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(2px); /* Adds a nice modern touch */
+  backdrop-filter: blur(2px); 
 }
 .modal-content {
   background: white; padding: 30px; border-radius: 15px;

@@ -105,13 +105,13 @@ export const updateTask = async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    // 1. 🛡️ Date Validation
+    
     const today = new Date().toISOString().split('T')[0];
     if (due_date < today) {
       return res.status(400).json({ message: "Due date must be today or later" });
     }
 
-    // 2. 🛡️ Duplicate Check (Now using the top-level Op)
+    
     const duplicate = await Task.findOne({
       where: {
         title,
@@ -126,7 +126,7 @@ export const updateTask = async (req, res) => {
       });
     }
 
-    // 3. Perform the Update
+    
     await task.update({
       title,
       due_date,
@@ -135,7 +135,7 @@ export const updateTask = async (req, res) => {
 
     res.json(task);
   } catch (error) {
-    // This will now catch "Op is not defined" if the import fails
+    
     res.status(400).json({ error: error.message });
   }
 };
