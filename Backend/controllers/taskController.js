@@ -93,7 +93,6 @@ export const updateTaskStatus = async (req, res) => {
   }
 };
 
-// Add this to your controllers/taskController.js
 export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -105,7 +104,30 @@ export const updateTask = async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    // Update the task with new values
+    // 1. 🛡️ Date Validation: Prevent past dates
+    const today = new Date().toISOString().split('T')[0];
+    if (due_date < today) {
+      return res.status(400).json({ message: "Due date must be today or later" });
+    }
+
+    // 2. 🛡️ Duplicate Check: Look for other tasks with same title/date
+    // We use [Op.ne] to exclude the current task's ID from the search
+    const { Op } = await import('sequelize');
+    const duplicate = await Task.findOne({
+      where: {
+        title,
+        due_date,
+        id: { [Op.ne]: id } // Don't flag the task itself as a duplicate
+      }
+    });
+
+    if (duplicate) {
+      return res.status(400).json({ 
+        message: "A task with this title and due date already exists" 
+      });
+    }
+
+    // 3. Perform the Update
     await task.update({
       title,
       due_date,
