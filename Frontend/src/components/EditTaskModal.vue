@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 // 1. Accept the existing task as a prop from the parent
 const props = defineProps({
@@ -14,6 +14,12 @@ const emit = defineEmits(['close', 'save']);
 // 2. Initialize with a copy of the task props
 // This allows the user to type without changing the main list until they hit "Save"
 const editedTask = ref({ ...props.task });
+
+watch(() => props.task, (newVal) => {
+  if (newVal) {
+    editedTask.value = { ...newVal };
+  }
+}, { deep: true });
 
 const submitForm = () => {
   // Validation

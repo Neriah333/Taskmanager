@@ -58,10 +58,14 @@ const handleSaveTask = async (taskData) => {
     
     // Refresh the list from the database
     await fetchTasks(); 
-  } catch (err) {
-    console.error("Save failed:", err.response?.data || err.message);
-    alert("Could not save task. Please check the console for details.");
-  }
+  } // Inside App.vue -> handleSaveTask
+ catch (err) {
+  // Extract the specific message from the backend response
+  const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message;
+  
+  console.error("Save failed details:", err.response?.data); 
+  alert("Save failed: " + errorMessage); // This will now show the actual text
+}
 };
 
 const handleUpdate = async (id, status) => {
