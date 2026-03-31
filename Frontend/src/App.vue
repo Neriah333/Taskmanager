@@ -3,12 +3,15 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import TaskList from './components/Tasklist.vue';
 import AddTaskModal from './components/AddTaskModal.vue';
-import EditTaskModal from './components/EditTaskModal.vue'; // 👈 1. Import Edit Modal
+import EditTaskModal from './components/EditTaskModal.vue';
+import ReportModal from './components/reportModal.vue';
+
 
 const tasks = ref([]);
 const showModal = ref(false);
-const showEditModal = ref(false); // 👈 2. New state for Edit Modal
-const selectedTask = ref(null);   // 👈 3. Store the task being edited
+const showEditModal = ref(false); 
+const selectedTask = ref(null);
+const showReportModal = ref(false);   
 const activeTab = ref('all');
 const API_URL = 'https://taskmanager-j4zq.onrender.com/api/tasks';
 
@@ -100,15 +103,22 @@ onMounted(fetchTasks);
 </script>
 
 <template>
-  <div class="dashboard-container">
-    <header class="main-header">
+      <div class="dashboard-container">
+        <header class="main-header">
       <div class="brand">
         <h1>My Task Dashboard</h1>
       </div>
-      <button class="add-task-btn" @click="showModal = true">
-        <span>+</span> Add New Task
-      </button>
+      <div class="header-actions">
+        <button class="report-btn" @click="showReportModal = true">
+          View Daily Report
+        </button>
+        <button class="add-task-btn" @click="showModal = true">
+          <span>+</span> Add New Task
+        </button>
+      </div>
     </header>
+
+    <ReportModal v-if="showReportModal" @close="showReportModal = false" />
 
     <AddTaskModal 
       v-if="showModal" 
@@ -177,6 +187,27 @@ onMounted(fetchTasks);
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.report-btn {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.report-btn:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
 }
 
 h1 {
