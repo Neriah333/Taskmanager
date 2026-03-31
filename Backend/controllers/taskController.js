@@ -1,5 +1,6 @@
 import Task from "../models/tasks.js"; 
 import sequelize from "../config/db.js";
+import { Op } from "sequelize";
 
 // 1. Create Task
 export const createTask = async (req, res) => {
@@ -104,20 +105,18 @@ export const updateTask = async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    // 1. 🛡️ Date Validation: Prevent past dates
+    // 1. 🛡️ Date Validation
     const today = new Date().toISOString().split('T')[0];
     if (due_date < today) {
       return res.status(400).json({ message: "Due date must be today or later" });
     }
 
-    // 2. 🛡️ Duplicate Check: Look for other tasks with same title/date
-    // We use [Op.ne] to exclude the current task's ID from the search
-    const { Op } = await import('sequelize');
+    // 2. 🛡️ Duplicate Check (Now using the top-level Op)
     const duplicate = await Task.findOne({
       where: {
         title,
         due_date,
-        id: { [Op.ne]: id } // Don't flag the task itself as a duplicate
+        id: { [Op.ne]: id } 
       }
     });
 
@@ -136,6 +135,7 @@ export const updateTask = async (req, res) => {
 
     res.json(task);
   } catch (error) {
+    // This will now catch "Op is not defined" if the import fails
     res.status(400).json({ error: error.message });
   }
 };
