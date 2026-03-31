@@ -93,6 +93,31 @@ export const updateTaskStatus = async (req, res) => {
   }
 };
 
+// Add this to your controllers/taskController.js
+export const updateTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, due_date, priority } = req.body;
+
+    const task = await Task.findByPk(id);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Update the task with new values
+    await task.update({
+      title,
+      due_date,
+      priority
+    });
+
+    res.json(task);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 // 4. Delete Task (Only if 'done')
 export const deleteTask = async (req, res) => {
   try {

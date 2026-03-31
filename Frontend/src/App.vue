@@ -3,10 +3,12 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import TaskList from './components/Tasklist.vue';
 import AddTaskModal from './components/AddTaskModal.vue';
+import EditTaskModal from './components/EditTaskModal.vue'; // 👈 1. Import Edit Modal
 
-// 1. STATE
 const tasks = ref([]);
 const showModal = ref(false);
+const showEditModal = ref(false); // 👈 2. New state for Edit Modal
+const selectedTask = ref(null);   // 👈 3. Store the task being edited
 const activeTab = ref('all');
 const API_URL = 'https://taskmanager-j4zq.onrender.com/api/tasks';
 
@@ -21,29 +23,44 @@ const fetchTasks = async () => {
   }
 };
 
-// 3. ACTIONS
+// 4. ADD THIS: Function to open the edit modal
+const openEditModal = (task) => {
+  selectedTask.value = { ...task }; // Create a copy
+  showEditModal.value = true;
+};
+
+// 5. UPDATE handleSaveTask to handle EDITS too
 const handleSaveTask = async (taskData) => {
   try {
-    // We construct the payload to match your Sequelize Model exactly
+    // Check if we are editing (id exists) or creating (no id)
+    const isEdit = !!taskData.id;
+    const url = isEdit ? `${API_URL}/${taskData.id}` : API_URL;
+    
+    // Construct the exact payload your backend expects
     const payload = {
       title: taskData.title,
-      due_date: taskData.due_date, // Backend expects YYYY-MM-DD
-      priority: taskData.priority || 'medium',
-      status: taskData.status || 'pending'
+      due_date: taskData.due_date,
+      priority: taskData.priority,
+      status: taskData.status // Keep the existing status
     };
 
-    await axios.post(API_URL, payload);
-    
-    showModal.value = false;
-    await fetchTasks(); // Refresh list
-  } catch (err) {
-    // This detailed log helps you find the exact field causing the 400 error
-    if (err.response) {
-      console.error("Server Validation Error:", err.response.data);
-      alert(`Save failed: ${JSON.stringify(err.response.data.message || err.response.data)}`);
+    if (isEdit) {
+      // ✅ Use PUT for updates
+      await axios.put(url, payload);
     } else {
-      console.error("Error saving task:", err.message);
+      // ➕ Use POST for new tasks
+      await axios.post(url, payload);
     }
+
+    // Close whichever modal is open
+    showModal.value = false;
+    showEditModal.value = false; 
+    
+    // Refresh the list from the database
+    await fetchTasks(); 
+  } catch (err) {
+    console.error("Save failed:", err.response?.data || err.message);
+    alert("Could not save task. Please check the console for details.");
   }
 };
 
@@ -95,6 +112,13 @@ onMounted(fetchTasks);
       @save="handleSaveTask" 
     />
 
+    <EditTaskModal 
+      v-if="showEditModal" 
+      :task="selectedTask"
+      @close="showEditModal = false" 
+      @save="handleSaveTask" 
+    />
+
     <nav class="status-menu">
       <button :class="{ active: activeTab === 'all' }" @click="activeTab = 'all'">All Tasks</button>
       <button :class="{ active: activeTab === 'pending' }" @click="activeTab = 'pending'">Pending</button>
@@ -111,7 +135,7 @@ onMounted(fetchTasks);
         :tasks="filteredTasks" 
         @update-status="handleUpdate"
         @delete-task="handleDelete"
-      />
+        @edit-task="openEditModal" />
     </section>
 
     <footer class="main-footer">

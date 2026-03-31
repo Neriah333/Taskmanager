@@ -4,26 +4,20 @@ import TaskCard from './Taskcard.vue';
 // 1. Receive the tasks from App.vue
 const props = defineProps(['tasks']);
 
-// 2. Declare EVERY event you intend to send to the parent
-const emit = defineEmits(['update-status', 'delete-task']);
+// 2. ADD 'edit-task' to the emits list 
+const emit = defineEmits(['update-status', 'delete-task', 'edit-task']);
 
-// Note: You don't necessarily need forwardUpdate functions 
-// if you are emitting directly in the template, but it's cleaner to keep them.
 </script>
 
 <template>
   <div class="task-list">
-    <div v-if="!tasks || tasks.length === 0" class="empty-state">
-      <p>No tasks found.</p>
-    </div>
-
     <TaskCard 
       v-for="task in tasks" 
       :key="task.id" 
       :task="task"
       @update-status="(id, stat) => $emit('update-status', id, stat)"
       @delete-task="(id) => $emit('delete-task', id)"
-    />
+      @edit-task="(task) => $emit('edit-task', task)"  />
   </div>
 </template>
 

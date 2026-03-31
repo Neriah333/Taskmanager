@@ -8,7 +8,7 @@ const props = defineProps({
 });
 
 // 2. Define Emits: This allows the card to send actions back to App.vue
-const emit = defineEmits(['update-status', 'delete-task']);
+const emit = defineEmits(['update-status', 'delete-task', 'edit-task']);
 
 // Helper to format the status for display if needed
 const formatStatus = (status) => {
@@ -35,6 +35,13 @@ const formatStatus = (status) => {
       <div class="card-actions">
         <p class="action-label">Action</p>
         
+        <button 
+          class="btn-edit"
+          @click="emit('edit-task', task)"
+        >
+           Edit Task
+        </button>
+
         <button 
           v-if="task.status === 'pending'" 
           class="btn-start"
@@ -146,6 +153,20 @@ const formatStatus = (status) => {
   font-weight: 700;
 }
 
+/* Add this below your other button styles */
+.btn-edit { 
+  background: #f8fafc; 
+  color: #475569; 
+  border-color: #e2e8f0 !important; 
+  margin-bottom: 8px; /* Space between Edit and the next button */
+}
+
+.btn-edit:hover { 
+  background: #f1f5f9; 
+  color: #1e293b;
+}
+
+/* Ensure buttons stack nicely if multiple are visible */
 .card-actions button {
   width: 100%;
   padding: 10px;
@@ -154,6 +175,7 @@ const formatStatus = (status) => {
   font-weight: 600;
   border: 1px solid transparent;
   transition: all 0.2s;
+  display: block; /* Ensures they stack vertically */
 }
 
 .btn-start { background: #eff6ff; color: #2563eb; border-color: #dbeafe !important; }

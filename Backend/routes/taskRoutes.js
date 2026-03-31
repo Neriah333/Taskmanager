@@ -3,7 +3,8 @@ import {
   createTask, 
   getTaskById,
   getAllTasks, 
-  updateTaskStatus, 
+  updateTaskStatus,
+  updateTask, 
   deleteTask, 
   getDailyReport 
 } from "../controllers/taskController.js";
@@ -11,9 +12,10 @@ import {
 const router = express.Router();
 
 router.post("/", createTask);
-router.get('/:id', getTaskById);
 router.get("/", getAllTasks);
-router.get("/report", getDailyReport); // Put this BEFORE /:id
+router.get("/report", getDailyReport); 
+router.put("/:id", updateTask);
+router.get('/:id', getTaskById);
 router.patch("/:id/status", updateTaskStatus);
 router.delete("/:id", deleteTask);
 
