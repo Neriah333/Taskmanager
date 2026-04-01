@@ -33,7 +33,7 @@ const emit = defineEmits(['update-status', 'delete-task', 'edit-task']);
   display: grid;
   grid-template-columns: 1fr; 
   gap: 10px;
-  width: 100%; 
+  width: 95%; 
   max-width: 1400px;
   margin: 20px auto;
 }

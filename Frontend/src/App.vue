@@ -20,7 +20,7 @@ const API_URL = 'https://taskmanager-j4zq.onrender.com/api/tasks';
 const fetchTasks = async () => {
   try {
     const res = await axios.get(API_URL);
-    // Ensure we handle cases where res.data might not be an array
+    
     tasks.value = Array.isArray(res.data) ? res.data : [];
   } catch (err) {
     console.error("Error fetching tasks:", err);
@@ -48,41 +48,41 @@ const handleSaveTask = async (taskData) => {
 
     if (isEdit) {
       await axios.put(url, payload);
-      toast.success("Task updated successfully! ");
     } else {
       await axios.post(url, payload);
-      toast.success("New task added! ");
     }
 
+    
     showModal.value = false;
     showEditModal.value = false; 
+    
+    
     await fetchTasks(); 
   } 
   catch (err) {
     const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message;
-    toast.error("Save failed: " + errorMessage);
+    console.error("Save failed details:", err.response?.data); 
+    alert("Save failed: " + errorMessage); 
   }
 };
 
 const handleUpdate = async (id, status) => {
   try {
+    
     await axios.patch(`${API_URL}/${id}/status`, { status });
-    toast.info(`Status changed to ${status.replace('_', ' ')}`);
     await fetchTasks();
   } catch (err) {
-    toast.error("Update failed");
+    console.error("Update failed:", err.response?.data || err.message);
   }
 };
 
 const handleDelete = async (id) => {
-  
   if (confirm("Are you sure you want to delete this task?")) {
     try {
       await axios.delete(`${API_URL}/${id}`);
-      toast.warning("Task deleted");
       await fetchTasks();
     } catch (err) {
-      toast.error("Delete failed");
+      console.error("Delete failed:", err.response?.data || err.message);
     }
   }
 };
