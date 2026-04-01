@@ -31,17 +31,17 @@ const emit = defineEmits(['update-status', 'delete-task', 'edit-task']);
 }
 .task-list {
   display: grid;
-  /* Use 100% width on mobile, and 1fr (fractional unit) */
   grid-template-columns: 1fr; 
-  gap: 16px;
-  width: 95%; /* Give more room on mobile */
+  gap: 10px;
+  width: 100%; 
   max-width: 1400px;
   margin: 20px auto;
 }
 
 @media (min-width: 768px) {
   .task-list {
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
   }
 }
 </style>

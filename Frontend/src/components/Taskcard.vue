@@ -187,9 +187,18 @@ const formatStatus = (status) => {
 .btn-delete { background: #fef2f2; color: #dc2626; border-color: #fee2e2 !important; }
 .btn-delete:hover { background: #fee2e2; }
 @media (max-width: 600px) {
+  .task-card {
+    padding: 12px; 
+  }
+
   .card-content {
     flex-direction: column; 
     align-items: flex-start;
+    gap: 10px;
+  }
+
+  .task-details h3 {
+    font-size: 1rem; 
   }
 
   .card-actions {
