@@ -31,16 +31,16 @@ const emit = defineEmits(['update-status', 'delete-task', 'edit-task']);
 }
 .task-list {
   display: grid;
-  grid-template-columns: 1fr; 
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 10px;
-  width: 95%; 
+  width: 100%; 
   max-width: 1400px;
-  margin: 20px auto;
+  margin: 0 auto;
 }
 
 @media (min-width: 768px) {
   .task-list {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
     gap: 20px;
   }
 }

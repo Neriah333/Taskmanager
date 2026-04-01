@@ -72,6 +72,9 @@ const formatStatus = (status) => {
 
 <style scoped>
 .task-card {
+  width:100%;
+  display: flex;
+  flex-direction: column;
   background: white;
   border-radius: 12px;
   margin-bottom: 16px;
@@ -96,13 +99,20 @@ const formatStatus = (status) => {
   justify-content: space-between;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
-
+.task-details {
+  flex: 1; /* This tells the text area to grow and take up all empty space */
+  min-width: 0; /* This prevents long titles from breaking the layout */
+}
 .task-details h3 {
   margin: 8px 0;
   font-size: 1.25rem;
   color: #1e293b;
   font-weight: 700;
+  overflow-wrap: anywhere; 
+  word-break: break-word;   
+  max-width: 100%;
 }
 
 .priority-label {
