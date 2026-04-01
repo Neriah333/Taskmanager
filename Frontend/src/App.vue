@@ -1,4 +1,5 @@
 <script setup>
+import { useToast } from "vue-toastification";
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import TaskList from './components/Tasklist.vue';
@@ -12,6 +13,7 @@ const showEditModal = ref(false);
 const selectedTask = ref(null);
 const showReportModal = ref(false);   
 const activeTab = ref('all');
+const toast = useToast();
 const API_URL = 'https://taskmanager-j4zq.onrender.com/api/tasks';
 
 // 2. FETCH TASKS
@@ -41,46 +43,46 @@ const handleSaveTask = async (taskData) => {
       title: taskData.title,
       due_date: taskData.due_date,
       priority: taskData.priority,
-      status: taskData.status // Keep the existing status
+      status: taskData.status 
     };
 
     if (isEdit) {
       await axios.put(url, payload);
+      toast.success("Task updated successfully! ");
     } else {
       await axios.post(url, payload);
+      toast.success("New task added! ");
     }
 
-    // Close whichever modal is open
     showModal.value = false;
     showEditModal.value = false; 
-    
-    // Refresh the list from the database
     await fetchTasks(); 
   } 
   catch (err) {
     const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message;
-    console.error("Save failed details:", err.response?.data); 
-    alert("Save failed: " + errorMessage); // This will now show the actual text
+    toast.error("Save failed: " + errorMessage);
   }
 };
 
 const handleUpdate = async (id, status) => {
   try {
-    // Note: Ensure your backend route for PATCH exists as /api/tasks/:id/status
     await axios.patch(`${API_URL}/${id}/status`, { status });
+    toast.info(`Status changed to ${status.replace('_', ' ')}`);
     await fetchTasks();
   } catch (err) {
-    console.error("Update failed:", err.response?.data || err.message);
+    toast.error("Update failed");
   }
 };
 
 const handleDelete = async (id) => {
+  
   if (confirm("Are you sure you want to delete this task?")) {
     try {
       await axios.delete(`${API_URL}/${id}`);
+      toast.warning("Task deleted");
       await fetchTasks();
     } catch (err) {
-      console.error("Delete failed:", err.response?.data || err.message);
+      toast.error("Delete failed");
     }
   }
 };
