@@ -186,4 +186,25 @@ const formatStatus = (status) => {
 
 .btn-delete { background: #fef2f2; color: #dc2626; border-color: #fee2e2 !important; }
 .btn-delete:hover { background: #fee2e2; }
+@media (max-width: 600px) {
+  .card-content {
+    flex-direction: column; 
+    align-items: flex-start;
+  }
+
+  .card-actions {
+    width: 100%;
+    text-align: left;
+    margin-top: 15px;
+    border-top: 1px inset #f1f5f9;
+    padding-top: 15px;
+  }
+
+  .card-actions button {
+    display: inline-block; 
+    width: auto;
+    margin-right: 8px;
+    padding: 8px 16px;
+  }
+}
 </style>

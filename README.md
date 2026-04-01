@@ -103,6 +103,7 @@ Frontend/
    git clone https://github.com/Neriah333/Taskmanager.git
    
    ``` 
+   or download the zip folder, extract it and open on vscode
 
 ```bash
 cd Backend
@@ -114,20 +115,28 @@ npm install
 ```
 
 2. **Environment Setup**
-   Create a `.env` file in the server directory:
-   Backend
-   ```
-    PORT=5000
-    DB_NAME=defaultdb
-    DB_USER=User name
-    DB_PASS=Your pass
-    DB_HOST=Your password
-    DB_PORT=27167
-   ```
+      ## ☁️ Optional: Aiven Cloud Database Setup
+
+      This project can be connected to a managed cloud database using Aiven.
+
+      ### Steps:
+      1. Create an account on Aiven
+      2. Create a new MySQL service
+      3. Copy the connection details
+
+      ### Update your `.env` file:
+
+      ```env
+      DB_HOST=your-aiven-host
+      DB_PORT=your-port
+      DB_USER=your-username
+      DB_PASSWORD=your-password
+      DB_NAME=your-database
+   
    Frontend
     ```env
    VITE_API_URL=https://your-backend-url.com
-
+    ```
 
 Run migrations:
 

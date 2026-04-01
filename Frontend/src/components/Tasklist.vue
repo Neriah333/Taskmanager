@@ -22,18 +22,26 @@ const emit = defineEmits(['update-status', 'delete-task', 'edit-task']);
 </template>
 
 <style scoped>
-.task-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 1000px;
-  margin-top: 20px;
-}
+
 .empty-state {
   text-align: center;
   color: #94a3b8;
   grid-column: 1 / -1;
   padding: 40px;
+}
+.task-list {
+  display: grid;
+  /* Use 100% width on mobile, and 1fr (fractional unit) */
+  grid-template-columns: 1fr; 
+  gap: 16px;
+  width: 95%; /* Give more room on mobile */
+  max-width: 1400px;
+  margin: 20px auto;
+}
+
+@media (min-width: 768px) {
+  .task-list {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  }
 }
 </style>

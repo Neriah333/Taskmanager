@@ -6,7 +6,6 @@ import AddTaskModal from './components/AddTaskModal.vue';
 import EditTaskModal from './components/EditTaskModal.vue';
 import ReportModal from './components/reportModal.vue';
 
-
 const tasks = ref([]);
 const showModal = ref(false);
 const showEditModal = ref(false); 
@@ -35,10 +34,8 @@ const openEditModal = (task) => {
 // 5. UPDATE handleSaveTask to handle EDITS too
 const handleSaveTask = async (taskData) => {
   try {
-    
     const isEdit = !!taskData.id;
     const url = isEdit ? `${API_URL}/${taskData.id}` : API_URL;
-    
     
     const payload = {
       title: taskData.title,
@@ -48,10 +45,8 @@ const handleSaveTask = async (taskData) => {
     };
 
     if (isEdit) {
-      
       await axios.put(url, payload);
     } else {
-     
       await axios.post(url, payload);
     }
 
@@ -62,13 +57,11 @@ const handleSaveTask = async (taskData) => {
     // Refresh the list from the database
     await fetchTasks(); 
   } 
- catch (err) {
-  
-  const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message;
-  
-  console.error("Save failed details:", err.response?.data); 
-  alert("Save failed: " + errorMessage); // This will now show the actual text
-}
+  catch (err) {
+    const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message;
+    console.error("Save failed details:", err.response?.data); 
+    alert("Save failed: " + errorMessage); // This will now show the actual text
+  }
 };
 
 const handleUpdate = async (id, status) => {
@@ -103,8 +96,8 @@ onMounted(fetchTasks);
 </script>
 
 <template>
-      <div class="dashboard-container">
-        <header class="main-header">
+  <div class="dashboard-container">
+    <header class="main-header">
       <div class="brand">
         <h1>My Task Dashboard</h1>
       </div>
@@ -167,7 +160,6 @@ onMounted(fetchTasks);
 </template>
 
 <style>
-
 .dashboard-container {
   width: 100%;
   min-height: 100vh;
@@ -215,7 +207,6 @@ h1 {
   font-weight: 800;
 }
 
-
 .add-task-btn {
   background-color: #10b981; 
   color: white;
@@ -226,12 +217,11 @@ h1 {
   cursor: pointer;
 }
 
-
 .status-menu {
   width: 90%;
   max-width: 1000px;
   display: flex;
-  gap: 40px;                 
+  gap: 40px;                  
   border-bottom: 2px solid #e2e8f0;
   margin-bottom: 30px;
 }
@@ -250,19 +240,16 @@ h1 {
   color: #2563eb;            
   border-bottom: 3px solid #2563eb;
 }
+
 .footer-content {
   width: 90%;
   max-width: 1000px;
   margin: 0 auto;
-  
- 
   display: flex;
   justify-content: space-between; 
   align-items: center; 
-  
   padding: 10px 0;
 }
-
 
 .main-footer {
   width: 100%;
@@ -270,5 +257,48 @@ h1 {
   border-top: 1px solid #e2e8f0;
   margin-top: auto;
   padding: 20px 0;
+}
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .main-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch; /* Allows children to fill the width */
+  }
+
+  .header-actions {
+    display: flex;       /* Ensure it's a flexbox */
+    flex-direction: row; /* Force side-by-side */
+    gap: 10px;          /* Small space between buttons */
+    width: 100%;
+  }
+
+  .header-actions button {
+    flex: 1;            /* This makes both buttons exactly 50% width */
+    padding: 10px 5px;  /* Slightly smaller padding for small screens */
+    font-size: 0.85rem; /* Shrink text slightly so it doesn't wrap */
+    white-space: nowrap; /* Prevents text from jumping to two lines */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Optional: Hide the "+" icon on very small screens to save space */
+  .add-task-btn span {
+    display: none; 
+  }
+
+  .status-menu {
+    gap: 10px; 
+    justify-content: space-between;
+    overflow-x: auto; 
+    white-space: nowrap;
+    padding-bottom: 5px;
+  }
+
+  .status-menu button {
+    font-size: 0.9rem;
+    padding: 10px 5px;
+  }
 }
 </style>
