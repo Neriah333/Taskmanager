@@ -10,6 +10,9 @@ Task Manager is more than just a to-do list. It is a full-stack solution that de
 -  **Responsive Design**: Optimized for both desktop and mobile using Flexbox & Grid  
 
 ---
+<img src="./Frontend/public/dashboard.jpg" alt="App Screenshot" width="400"/>
+<img src="./Frontend/public/addtaskpage.jpg" alt="App Screenshot" width="400"/>
+<img src="./Frontend/public/tasklist.jpg" alt="App Screenshot" width="400"/>
 
 ##  Key Features
 
